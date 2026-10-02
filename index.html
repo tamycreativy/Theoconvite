@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Theo · 4 anos · Missão Espacial</title>
+<meta property="og:title" content="Theo faz 4 anos! Embarque nessa missão">
+<meta property="og:image" content="capa.png">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:#02030a;overflow:hidden;font-family:system-ui,-apple-system,'Segoe UI',sans-serif}
+.tela{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity .6s ease,visibility .6s}
+.tela.ativa{opacity:1;visibility:visible}
+/* a imagem sempre cabe inteira na tela, na proporção 9:16 do convite */
+.moldura{position:relative;width:min(100vw,calc(100vh * 1080 / 1920));aspect-ratio:1080/1920;max-height:100vh}
+.moldura img.fundo{display:block;width:100%;height:100%;user-select:none;-webkit-user-drag:none}
+/* CAPA */
+#capa{cursor:pointer}
+#capa .abrir{position:absolute;left:27%;top:81.5%;width:46%;height:13.5%;border-radius:20px;background:transparent;border:0;cursor:pointer;animation:pulsa 1.8s ease-in-out infinite}
+@keyframes pulsa{0%,100%{box-shadow:0 0 0 0 rgba(255,200,80,.0),0 0 12px rgba(120,180,255,.0)}50%{box-shadow:0 0 0 6px rgba(255,200,80,.25),0 0 28px rgba(120,180,255,.55)}}
+/* INFORMAÇÕES: áreas clicáveis sobre os ícones da imagem */
+.hot{position:absolute;background:transparent;border:0;border-radius:50%;cursor:pointer;transition:background .2s,transform .15s}
+.hot:active{transform:scale(.94);background:rgba(255,255,255,.18)}
+.hot:focus-visible{outline:3px solid #ffd35c;outline-offset:2px}
+#h-conf{left:21%;top:58.4%;width:22%;height:16.2%;cursor:default}
+#h-local{left:38%;top:70.4%;width:24%;height:14.6%}
+#h-dicas{left:54.5%;top:58.4%;width:23.5%;height:16.2%}
+/* DICAS */
+#dicas{background:rgba(2,3,10,.96)}
+#dicas .caixa{position:relative;max-width:100vw;max-height:100vh;display:flex;align-items:center;justify-content:center}
+#dicas img{display:block;max-width:100vw;max-height:100vh;object-fit:contain}
+.voltar{position:fixed;top:max(14px,env(safe-area-inset-top));left:14px;z-index:20;background:linear-gradient(#1b3f9a,#0f2566);color:#fff;border:2px solid #ffd35c;border-radius:999px;padding:9px 18px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.5)}
+.breve{display:none;max-width:320px;text-align:center;color:#fff;padding:28px;border:2px solid #ffd35c;border-radius:20px;background:#0f2566;font-size:18px;line-height:1.4}
+</style>
+</head>
+<body>
+
+<!-- 1) CAPA -->
+<section class="tela ativa" id="capa" onclick="abrirConvite()" aria-label="Capa do convite do Theo. Toque para abrir">
+  <div class="moldura">
+    <img class="fundo" src="capa.png" alt="Convite de 4 anos do Theo, tema astronauta">
+    <button class="abrir" type="button" aria-label="Clique aqui para abrir"></button>
+  </div>
+</section>
+
+<!-- 2) INFORMAÇÕES -->
+<section class="tela" id="info">
+  <div class="moldura">
+    <img class="fundo" src="informacoes.png" alt="Dia 15 de novembro, às 17h00">
+    <button class="hot" id="h-conf" type="button" tabindex="-1" aria-hidden="true"></button>
+    <button class="hot" id="h-local" type="button" onclick="abrirMapa()" aria-label="Local da festa"></button>
+    <button class="hot" id="h-dicas" type="button" onclick="abrirDicas()" aria-label="Dicas de presente"></button>
+  </div>
+</section>
+
+<!-- 3) DICAS DE PRESENTE (suba a sua imagem como dicas.png na mesma pasta) -->
+<section class="tela" id="dicas">
+  <button class="voltar" type="button" onclick="fecharDicas()">← Voltar</button>
+  <div class="caixa">
+    <img src="dicas.png" alt="Dicas de presente" onerror="this.style.display='none';document.getElementById('breve').style.display='block'">
+    <div class="breve" id="breve">🎁 As dicas de presente chegam em breve!</div>
+  </div>
+</section>
+
+<script>
+// ===== CONFIGURE AQUI =====
+var LOCAL_BUSCA = 'Buffet Magia Kids, Fortaleza';   // se souber o endereço exato, troque aqui
+// ==========================
+
+function trocar(deId, paraId){
+  document.getElementById(deId).classList.remove('ativa');
+  document.getElementById(paraId).classList.add('ativa');
+}
+function abrirConvite(){ trocar('capa','info'); }
+function abrirMapa(){
+  window.open('https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(LOCAL_BUSCA), '_blank', 'noopener');
+}
+function abrirDicas(){ trocar('info','dicas'); }
+function fecharDicas(){ trocar('dicas','info'); }
+document.addEventListener('keydown', function(e){
+  if(e.key==='Escape' && document.getElementById('dicas').classList.contains('ativa')) fecharDicas();
+  if((e.key==='Enter'||e.key===' ') && document.getElementById('capa').classList.contains('ativa')) abrirConvite();
+});
+// pré-carrega as outras telas
+['informacoes.png','dicas.png'].forEach(function(s){var i=new Image();i.src=s;});
+</script>
+</body>
+</html>
